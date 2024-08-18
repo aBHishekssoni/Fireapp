@@ -39,9 +39,9 @@ enum class ChatSendStatus {
 }
 
 data class ChatMessage(
-    val message: String,
-    val userData: UserData,
-    val timestamp: Long,
+    val message: String="",
+    val userData: UserData=UserData("","",""),
+    val timestamp: Long = System.currentTimeMillis(),
 )
 
 data class AppState(
@@ -85,6 +85,9 @@ class AppViewModel() : ViewModel() {
     }
 
     private val db = Firebase.firestore
+    init {
+        updateChatList()
+    }
 
 
     private fun updateChatList() {
@@ -118,6 +121,7 @@ class AppViewModel() : ViewModel() {
                 )
             }
         }
+            updateChatList()
 
         }
     }
@@ -187,9 +191,9 @@ data class SignInResult(
 )
 
 data class UserData(
-    val uid: String,
-    val email: String?,
-    val photoUrl: String?,
+    val uid: String ="",
+    val email: String="",
+    val photoUrl: String="",
 )
 
 class GoogleAuthUiClient(
@@ -230,7 +234,7 @@ class GoogleAuthUiClient(
                 data = user?.let {
                     UserData(
                         uid = it.uid,
-                        email = user.email,
+                        email = user.email?:"",
                         photoUrl = user.photoUrl.toString()
                     )
                 },
@@ -261,7 +265,7 @@ class GoogleAuthUiClient(
         return user?.let {
             UserData(
                 uid = it.uid,
-                email = user.email,
+                email = user.email?: "",
                 photoUrl = user.photoUrl.toString()
             )
         }
